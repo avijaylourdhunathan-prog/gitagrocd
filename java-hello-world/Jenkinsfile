@@ -1,0 +1,29 @@
+pipeline {
+    agent any
+    options { skipDefaultCheckout(true) }
+
+    stages {
+        stage('Checkout GitHub') {
+            steps {
+                checkout scm
+            }
+        }
+        stage('Compile Java') {
+            steps {
+                sh 'mkdir -p build/classes && javac -d build/classes java-hello-world/HelloWorld.java'
+            }
+        }
+        stage('Run Java') {
+            steps {
+                sh 'java -cp build/classes HelloWorld'
+            }
+        }
+    }
+
+    post {
+        success {
+            echo 'GitHub source checked out, compiled and executed successfully!'
+        }
+    }
+}
+
